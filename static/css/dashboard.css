@@ -64,6 +64,9 @@ body {
 /*
  * Navbar
  */
+ .navbar-dark .navbar-nav .nav-link:hover {
+  color: red;
+}
 
 .navbar-brand {
   padding-top: .75rem;
@@ -98,3 +101,4 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
