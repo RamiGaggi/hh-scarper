@@ -1,7 +1,7 @@
 from django.urls import path
-from hh_scarper import views
+from hhscarper import views
 
-app_name = 'hh_scarper'
+app_name = 'hhscarper'
 
 urlpatterns = [
     path('', views.index),

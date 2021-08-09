@@ -1,0 +1,33 @@
+{% load bootstrap4 %}
+{% load static %}
+{% if 'use_i18n'|bootstrap_setting %}
+    {% load i18n %}
+    {% get_current_language as LANGUAGE_CODE %}
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'ru' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/journal-text.svg' %}"/>
+    <title>{% block title %}HH-scarper{% endblock %}</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    {% block extra_head %}{% endblock %}
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+</head>
+<body>
+    {% include 'header.html' %}
+    
+    <div class="container-fluid">
+        <div class="row">
+        {% include 'navbar.html' %}
+        {% block before_content %}{% endblock %}
+        {% block content %}{% endblock %}
+        {% block after_content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
