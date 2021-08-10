@@ -4,13 +4,14 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link"href="#">{% translate "Рабочий стол" %}</a>
+              <a class="nav-link {% if "/" == request.path %}active{% endif %}"  href="{% url 'hhscarper:dashboard' %}">{% translate "Рабочий стол" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Orders</a>
+              <a class="nav-link {% if "requests" in request.path %}active{% endif %}" href="{% url 'hhscarper:request-list' %}">{% translate "Запросы" %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="#">Products</a>
+              <a class="nav-link" href="#">{% translate "Вакансии" %}</a>
+            </li>
         </ul>
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
           <span>Saved reports</span>

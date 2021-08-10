@@ -1,17 +1,32 @@
 import logging
 
+from django.core.serializers import serialize
 from django.http import HttpResponse
+from django.views.generic.base import View
 from django.views.generic.list import ListView
-from hhscarper.models import Vacancy
+from hhscarper.models import Request, Vacancy
 from hhscarper.scarper import get_vacancy_urls
 
 logger = logging.getLogger(__name__)
 
 
-class VacancyListView(ListView):
-    model = Vacancy
-    context_object_name = 'vacancy_list'
+class DashoardView(ListView):
+    model = Request
+    context_object_name = 'request_list'
     template_name = 'hhscarper/dashboard.html'
+
+
+class CreateRequestView(View):
+    def post(self, request, *args, **kwargs):
+        logger.info(request.POST)
+        logger.info(kwargs)
+        return HttpResponse('Hello, World!')
+
+
+class ListRequestView(ListView):
+    model = Request
+    context_object_name = 'request_list'
+    template_name = 'hhscarper/request-list.html'
 
 
 def test_view(request):

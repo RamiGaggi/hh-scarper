@@ -27,7 +27,7 @@ class Vacancy(TimeStampMixin, models.Model):
     external_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
-    description = models.CharField(max_length=1000)
+    description = models.TextField(max_length=10000)
     request = models.ForeignKey('Request', on_delete=models.CASCADE)
 
     class Meta:

@@ -4,6 +4,7 @@ from hhscarper import views
 app_name = 'hhscarper'
 
 urlpatterns = [
-    path('', views.VacancyListView.as_view(), name='dashboard'),
-    path('get_urls/', views.test_view, name='test'),
+    path('', views.DashoardView.as_view(), name='dashboard'),
+    path('requests/create/', views.CreateRequestView.as_view(), name='request-create'),
+    path('requests', views.ListRequestView.as_view(), name='request-list'),
 ]

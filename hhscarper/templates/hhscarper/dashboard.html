@@ -10,20 +10,20 @@
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">{% translate "Наименование" %}</th>
+                    <th scope="col">{% translate "Ключевое слово" %}</th>
                     <th scope="col">{% translate "Ссылка" %}</th>
-                    <th scope="col">{% translate "Дата создания" %}</th>
+                    <th scope="col">{% translate "Время запроса" %}</th>
                     <th scope="col">{% translate "Дата обновления" %}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for vacancy in vacancy_list %}
+                {% for request in request_list %}
                     <tr>
-                        <td>{{ vacancy.pk }}</td>
-                        <td>{{ vacancy.title }}</td>
-                        <td>{{ vacancy.link }}</td>
-                        <td>{{ vacancy.created_at }}</td>
-                        <td>{{ vacancy.updated_at }}</td>
+                        <td>{{ request.pk }}</td>
+                        <td>{{ request.search_value }}</td>
+                        <td>{{ request.status }}</td>
+                        <td>{{ request.time }}</td>
+                        <td>{{ request.updated_at }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

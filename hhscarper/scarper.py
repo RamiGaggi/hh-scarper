@@ -23,3 +23,8 @@ def get_vacancy_urls(page):
     browser.quit()
 
     return vacancies_list
+
+
+def vacancy_scrape(browser, page):
+    browser.get(page)
+    return browser.find_element_by_class_name('vacancy-description').text
