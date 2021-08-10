@@ -1,4 +1,5 @@
 from django.contrib import admin
-from hhscarper.models import User
+from hhscarper.models import User, Vacancy
 
-admin.register(User)
+admin.site.register(User)
+admin.site.register(Vacancy)

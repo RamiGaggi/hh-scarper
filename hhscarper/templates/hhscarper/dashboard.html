@@ -1,39 +1,33 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 
 {% block content %}
 
 <div class="container my-5 mx-auto">
-<h2>Section title</h2>
-<div class="table-responsive">
+    <h2>Section title</h2>
+    <div class="table-responsive">
         <table class="table  table-hover table-bordered table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">{% translate "Наименование" %}</th>
+                    <th scope="col">{% translate "Ссылка" %}</th>
+                    <th scope="col">{% translate "Дата создания" %}</th>
+                    <th scope="col">{% translate "Дата обновления" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vacancy in vacancy_list %}
+                    <tr>
+                        <td>{{ vacancy.pk }}</td>
+                        <td>{{ vacancy.title }}</td>
+                        <td>{{ vacancy.link }}</td>
+                        <td>{{ vacancy.created_at }}</td>
+                        <td>{{ vacancy.updated_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
-      </div>
+    </div>
 </div>
 {% endblock %}
