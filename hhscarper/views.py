@@ -1,10 +1,9 @@
 import logging
 
-from django.core.serializers import serialize
 from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.generic.list import ListView
-from hhscarper.models import Request, Vacancy
+from hhscarper.models import Request
 from hhscarper.scarper import get_vacancy_urls
 
 logger = logging.getLogger(__name__)
