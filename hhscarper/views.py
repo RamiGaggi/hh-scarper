@@ -1,7 +1,9 @@
 import logging
 
 from django.http import HttpResponse
-from django.views.generic.base import View
+from django.urls import reverse
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.models import Request
 from hhscarper.scarper import get_vacancy_urls
@@ -15,17 +17,26 @@ class DashoardView(ListView):
     template_name = 'hhscarper/dashboard.html'
 
 
-class CreateRequestView(View):
-    def post(self, request, *args, **kwargs):
-        logger.info(request.POST)
-        logger.info(kwargs)
-        return HttpResponse('Hello, World!')
-
-
-class ListRequestView(ListView):
+class RequestListView(ListView):
     model = Request
     context_object_name = 'request_list'
     template_name = 'hhscarper/request-list.html'
+
+
+class RequestCreateView(CreateView):
+    model = Request
+    context_object_name = 'request_create'
+    template_name = 'hhscarper/request-create.html'
+    fields = ['keyword']
+
+    def get_success_url(self):
+        return reverse('hhscarper:request-list')
+
+
+class RequestDetailView(DetailView):
+    model = Request
+    context_object_name = 'request_detail'
+    template_name = 'hhscarper/request-detail.html'
 
 
 def test_view(request):

@@ -1,3 +1,4 @@
+from logging import disable
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -46,19 +47,20 @@ class Request(TimeStampMixin, models.Model):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
 
-    search_value = models.CharField(max_length=100)
+    keyword = models.CharField(max_length=100)
     status = models.CharField(
         max_length=25,
         choices=Status.choices,
         default=Status.pending,
+        editable=False,
     )
     time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
-        return self.search_value
+        return self.keyword
 
     def get_absolute_url(self):
-        return reverse('request-detail', kwargs={'pk': self.pk})
+        return reverse('hhscarper:request-detail', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = _('запрос')

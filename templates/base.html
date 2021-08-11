@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="{% static 'img/journal-text.svg' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.svg' %}"/>
     <title>{% block title %}HH-scarper{% endblock %}</title>
     {% bootstrap_css %}
     {% bootstrap_javascript jquery='full' %}
@@ -20,7 +20,7 @@
 </head>
 <body>
     {% include 'header.html' %}
-    
+    {% bootstrap_messages %}
     <div class="container-fluid">
         <div class="row">
         {% include 'navbar.html' %}

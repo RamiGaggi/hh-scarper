@@ -17,7 +17,7 @@
     {% for request in request_list %}
         <tr>
             <td>{{ request.pk }}</td>
-            <td>{{ request.search_value }}</td>
+            <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
             <td>{{ request.status }}</td>
             <td>{{ request.time }}</td>
             <td>{{ request.updated_at }}</td>
