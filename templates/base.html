@@ -20,10 +20,10 @@
 </head>
 <body>
     {% include 'header.html' %}
-    {% bootstrap_messages %}
     <div class="container-fluid">
         <div class="row">
         {% include 'navbar.html' %}
+        <div class="container my-3">{% bootstrap_messages %}</div>
         {% block before_content %}{% endblock %}
         {% block content %}{% endblock %}
         {% block after_content %}{% endblock %}
