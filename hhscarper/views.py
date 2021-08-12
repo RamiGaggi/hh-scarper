@@ -1,12 +1,14 @@
 import logging
 
+from django.contrib import messages
 from django.http import HttpResponse
 from django.urls import reverse
+from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.models import Request
-from hhscarper.scarper import get_vacancy_urls
+from hhscarper.scarper import construct_hh_page, get_vacancy_urls
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +33,24 @@ class RequestCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('hhscarper:request-list')
+
+    def form_valid(self, form):
+        logger.debug(f'valid form {form.cleaned_data}')
+
+        keyword = form.cleaned_data['keyword']
+        page = construct_hh_page(keyword)
+        get_vacancy_urls(page)
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        logger.debug(f'invalid form {form.cleaned_data}')
+        messages.add_message(
+            self.request,
+            messages.ERROR,
+            _('Введите ключевое слово в поле запроса'),
+        )
+        return super().form_invalid(form)
 
 
 class RequestDetailView(DetailView):

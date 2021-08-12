@@ -1,4 +1,3 @@
-from logging import disable
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -47,7 +46,7 @@ class Request(TimeStampMixin, models.Model):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
 
-    keyword = models.CharField(max_length=100)
+    keyword = models.CharField(max_length=100, verbose_name=_('ключевое слово'))
     status = models.CharField(
         max_length=25,
         choices=Status.choices,
