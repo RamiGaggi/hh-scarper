@@ -17,7 +17,7 @@ secret-key:
 	@poetry run python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 
 test:
-	@poetry run python manage.py test
+	@poetry run pytest hhscarper
 
 test-coverage:
 	@poetry run coverage run manage.py test

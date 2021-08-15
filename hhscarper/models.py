@@ -24,7 +24,7 @@ class User(AbstractUser):
 
 
 class Vacancy(TimeStampMixin, models.Model):
-    external_id = models.IntegerField(unique=True)
+    external_id = models.IntegerField()
     title = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
     description = models.TextField(max_length=10000)
@@ -53,7 +53,7 @@ class Request(TimeStampMixin, models.Model):
         default=Status.pending,
         editable=False,
     )
-    time = models.TimeField(null=True, blank=True)
+    time = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.keyword

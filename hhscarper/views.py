@@ -1,14 +1,13 @@
 import logging
 
 from django.contrib import messages
-from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.models import Request
-from hhscarper.scarper import construct_hh_page, get_vacancy_urls
+from hhscarper.scarper import Vacancy, scrape
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +35,15 @@ class RequestCreateView(CreateView):
 
     def form_valid(self, form):
         logger.debug(f'valid form {form.cleaned_data}')
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            _('Запрос успешно отправлен'),
+        )
 
         keyword = form.cleaned_data['keyword']
-        page = construct_hh_page(keyword)
-        get_vacancy_urls(page)
-
+        request_obj = form.save(commit=True)
+        scrape(keyword, request_obj)
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -59,7 +62,7 @@ class RequestDetailView(DetailView):
     template_name = 'hhscarper/request-detail.html'
 
 
-def test_view(request):
-    page = 'https://hh.ru/search/vacancy?clusters=true&area=1&ored_clusters=true&enable_snippets=true&salary=&st=searchVacancy&text=python&page=0'  # noqa: E501
-    example = get_vacancy_urls(page)
-    return HttpResponse(example)
+class VacancyListView(ListView):
+    model = Vacancy
+    context_object_name = 'vacancy_list'
+    template_name = 'hhscarper/vacancy-list.html'
