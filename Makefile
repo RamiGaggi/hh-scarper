@@ -20,9 +20,9 @@ test:
 	@poetry run pytest hhscarper
 
 test-coverage:
-	@poetry run coverage run manage.py test
+	poetry run pytest hhscarper --cov=hhscarper
 
-coverage-xml:
+coverage-report-xml:
 	@poetry run coverage xml
 
 requirements.txt: poetry.lock
