@@ -20,10 +20,10 @@ test:
 	@poetry run pytest hhscarper
 
 test-coverage:
-	poetry run pytest hhscarper --cov=hhscarper
+	poetry run pytest hhscarper --cov=hhscarper --cov-report xml
 
-coverage-report-xml:
-	@poetry run coverage xml
+coverage-report:
+	@poetry run coverage report
 
 requirements.txt: poetry.lock
 	@poetry export --format requirements.txt --output requirements.txt
