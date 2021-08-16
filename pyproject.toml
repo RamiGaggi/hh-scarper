@@ -17,6 +17,8 @@ psycopg2-binary = "^2.9.1"
 django-bootstrap4 = "^3.0.1"
 requests = "^2.26.0"
 beautifulsoup4 = "^4.9.3"
+nltk = "^3.6.2"
+pymystem3 = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.15.3"
