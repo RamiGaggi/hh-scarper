@@ -4,13 +4,14 @@ from datetime import datetime
 from random import randint
 
 import requests
-from hhscarper.models import Vacancy
+from hhscarper.models import Request, Vacancy
 from hhscarper.preprocessor import get_description_text, preprocess_text
 
 logger = logging.getLogger(__name__)
 
 
-def scrape(keyword, request_obj):
+def scrape(keyword, request_obj_id):
+    request_obj = Request.objects.get(pk=request_obj_id)
     start = datetime.now()
     time.sleep(3)
     url = f'https://api.hh.ru/vacancies?text={keyword}'
@@ -29,7 +30,7 @@ def scrape(keyword, request_obj):
         for vacancy_id in vacancies:
             logger.debug(vacancy_id)
             vacancy = requests.get(f'https://api.hh.ru/vacancies/{vacancy_id}')
-            time.sleep(randint(2, 5))
+            time.sleep(randint(1, 3))
             vacancy_data = vacancy.json()
 
             description = get_description_text(vacancy_data['description'])

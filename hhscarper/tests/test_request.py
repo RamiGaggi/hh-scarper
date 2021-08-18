@@ -1,8 +1,14 @@
+import logging
 from datetime import datetime
 
 import pytest
 from django.urls import reverse
+from dotenv import load_dotenv
 from hhscarper.models import Request
+
+load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
@@ -34,8 +40,8 @@ def test_list(client, requests):
 
 
 @pytest.mark.django_db
-def test_detail(client, requests):
-    url = reverse('hhscarper:request-detail', kwargs={'pk': 2})
+def test_detail(client, requests, db):
+    req_obj = Request.objects.get(keyword='Haskell')
+    url = reverse('hhscarper:request-detail', kwargs={'pk': req_obj.pk})
     response = client.get(url)
     assert response.status_code == 200
-    assert Request.objects.get(pk=2).keyword == 'Haskell'

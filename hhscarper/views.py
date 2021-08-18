@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.models import Request, Vacancy
-from hhscarper.scarper import scrape
+from hhscarper.tasks import scrape_async
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class RequestCreateView(CreateView):
 
         keyword = form.cleaned_data['keyword']
         request_obj = form.save(commit=True)
-        scrape(keyword, request_obj)
+        scrape_async.delay(keyword, request_obj.id)
         return super().form_valid(form)
 
     def form_invalid(self, form):
