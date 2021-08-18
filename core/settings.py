@@ -163,5 +163,6 @@ logging.basicConfig(
 
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 logging.getLogger("selenium").setLevel(logging.WARNING)
+logging.getLogger("asyncio").setLevel(logging.WARNING)
 
 AUTH_USER_MODEL = 'hhscarper.User'

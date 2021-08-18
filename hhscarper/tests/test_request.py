@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from django.urls import reverse
 from hhscarper.models import Request
@@ -5,20 +7,21 @@ from hhscarper.models import Request
 
 @pytest.fixture
 def requests():
+    time = datetime.now().time()
     Request.objects.create(
         keyword='Python',
         status='pending',
-        time=35,
+        time=time,
     )
     Request.objects.create(
         keyword='Haskell',
         status='resolved',
-        time=41,
+        time=time,
     )
     Request.objects.create(
         keyword='Celery',
         status='pending',
-        time=21,
+        time=time,
     )
 
 

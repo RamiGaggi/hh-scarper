@@ -19,7 +19,7 @@
             <td>{{ request.pk }}</td>
             <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
             <td>{{ request.status }}</td>
-            <td>{{ request.time }}</td>
+            <td>{{ request.time|time:"H:i:s" }}</td>
             <td>{{ request.updated_at }}</td>
         </tr>
     {% endfor %}

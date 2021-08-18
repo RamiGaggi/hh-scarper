@@ -27,7 +27,9 @@ class Vacancy(TimeStampMixin, models.Model):
     external_id = models.IntegerField()
     title = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
-    description = models.TextField(max_length=10000)
+    description = models.TextField(max_length=3000)
+    key_skills = models.JSONField()
+    lemmas = models.JSONField()
     request = models.ForeignKey('Request', on_delete=models.CASCADE)
 
     class Meta:
@@ -53,7 +55,7 @@ class Request(TimeStampMixin, models.Model):
         default=Status.pending,
         editable=False,
     )
-    time = models.IntegerField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
         return self.keyword

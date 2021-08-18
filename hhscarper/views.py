@@ -6,8 +6,8 @@ from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
-from hhscarper.models import Request
-from hhscarper.scarper import Vacancy, scrape
+from hhscarper.models import Request, Vacancy
+from hhscarper.scarper import scrape
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class DashoardView(ListView):
     model = Request
     context_object_name = 'request_list'
-    template_name = 'hhscarper/dashboard.html'
+    template_name = 'new_base.html'
 
 
 class RequestListView(ListView):
