@@ -24,7 +24,7 @@ STOP_TOKENS = (
 )
 
 
-def get_description_text(text):
+def clean_text(text):
     soup = BeautifulSoup(text, 'html.parser')
     return soup.get_text()
 

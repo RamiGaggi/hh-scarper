@@ -10,6 +10,12 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+KEYWORD = 'test_keyword'
+URL = 'https://api-test.hhscarpertest.ru/vacancies'
+PAGE_URL = f'{URL}?per_page=100&text={KEYWORD}&page=0'
+VACANCY_ID = 000000
+VACANCY_URL = f'{URL}/{VACANCY_ID}'
+
 
 @pytest.fixture
 def requests():

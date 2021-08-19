@@ -24,13 +24,13 @@ class User(AbstractUser):
 
 
 class Vacancy(TimeStampMixin, models.Model):
-    external_id = models.IntegerField()
+    external_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
     description = models.TextField(max_length=3000)
-    key_skills = models.JSONField()
+    key_skills = models.JSONField(null=True)
     lemmas = models.JSONField()
-    request = models.ForeignKey('Request', on_delete=models.CASCADE)
+    request = models.ManyToManyField('Request')
 
     class Meta:
         verbose_name = _('vacancy')

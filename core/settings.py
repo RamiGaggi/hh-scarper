@@ -15,6 +15,9 @@ from pathlib import Path
 import logging
 import dj_database_url
 import sys
+import nltk
+
+nltk.download('stopwords', quiet=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hhscarper',
     'bootstrap4',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -153,8 +157,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LEVEL = logging.getLevelName(os.getenv('LOG_LEVEL'))
+logging.debug(LEVEL)
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=LEVEL,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     datefmt='%H:%M:%S',
     handlers=[logging.FileHandler(filename=BASE_DIR / 'logs/task_manager.log', mode='a'),
