@@ -147,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 logging.basicConfig(
-    level=int(os.getenv('LOG_LEVEL')),
+    level=int(os.getenv('LOG_LEVEL', 10)),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     datefmt='%H:%M:%S',
     handlers=[logging.FileHandler(filename=BASE_DIR / 'logs/task_manager.log', mode='a'),
@@ -162,6 +162,6 @@ logging.getLogger("asyncio").setLevel(logging.WARNING)
 AUTH_USER_MODEL = 'hhscarper.User'
 
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379')
 
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379')
