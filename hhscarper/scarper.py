@@ -17,7 +17,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     start = datetime.now()
 
     time.sleep(3)
-    url = f'{adress}?text={keyword}'
+    url = f'{adress}?per_page=100&text={keyword}'
     logger.debug(url)
 
     num_pages = requests.get(url).json()['pages']  # noqa: E501
