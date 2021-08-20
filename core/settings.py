@@ -10,12 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
-from pathlib import Path
 import logging
-import dj_database_url
+import os
 import sys
+from pathlib import Path
+
+import dj_database_url
 import nltk
+from django.core.management.utils import get_random_secret_key
 
 nltk.download('stopwords', quiet=True)
 
@@ -23,7 +25,7 @@ nltk.download('stopwords', quiet=True)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('DATABASE_URL')
+SECRET_KEY = os.getenv('DATABASE_URL', get_random_secret_key())
 
 
 DEBUG = os.getenv('DEBUG', 'False').lower() in {'yes', '1', 'true'}
