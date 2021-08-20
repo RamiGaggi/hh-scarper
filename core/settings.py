@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DATABASE_URL')
 
 
-DEBUG = os.getenv('DEBUG', False).lower() in {'yes', '1', 'true'}
+DEBUG = os.getenv('DEBUG', 'False').lower() in {'yes', '1', 'true'}
 
 
 ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
