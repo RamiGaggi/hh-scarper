@@ -18,6 +18,9 @@ jobs:
         run: |
           pip install poetry
           make install
+      - name: Collect static
+        run: |
+          make collectstatic
       - name: Run flake8
         run: |
           make lint
