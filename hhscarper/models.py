@@ -48,7 +48,11 @@ class Request(TimeStampMixin, models.Model):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
 
-    keyword = models.CharField(max_length=100, verbose_name=_('ключевое слово'))
+    keyword = models.CharField(
+        unique=True,
+        max_length=100,
+        verbose_name=_('ключевое слово'),
+    )
     status = models.CharField(
         max_length=25,
         choices=Status.choices,

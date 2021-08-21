@@ -13,10 +13,7 @@ logger = logging.getLogger(__name__)
 
 def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     request_obj = Request.objects.get(pk=request_obj_id)
-
     start = datetime.now()
-
-    time.sleep(3)
     url = f'{adress}?per_page=100&text={keyword}'
     logger.debug(url)
 
@@ -24,23 +21,18 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     time.sleep(randint(4, 7))
     base_url = '{0}?per_page=100&text={1}&page={2}'
     pages = (base_url.format(adress, keyword, num) for num in range(num_pages))
+    db_vacancies = set(Vacancy.objects.all().values_list('external_id', flat=True))  # noqa: E501
 
     for page in pages:
         page_items = requests.get(page).json()['items']
         time.sleep(randint(3, 6))  # Sleep
-        vacancies = (vacancy['id'] for vacancy in page_items)
-        db_vacancies = set(Vacancy.objects.values_list('external_id', flat=True))  # noqa: E501
+        vacancies = (int(vacancy['id']) for vacancy in page_items)
 
         for vacancy_id in vacancies:
-            logger.debug(vacancy_id)
+            logger.info(vacancy_id)
             if vacancy_id in db_vacancies:
-                vacancy_instance = Vacancy.objects.filter(external_id=vacancy_id).first()  # noqa: E501
-                kwargs = model_to_dict(
-                    vacancy_instance,
-                    exclude=['id', 'request'],
-                )
-                vacancy_obj = Vacancy.objects.create(**kwargs)
-                vacancy_obj.request.add(request_obj)
+                vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)  # noqa: E501
+                vacancy_instance.request.add(request_obj)
                 continue
 
             vacancy = requests.get(f'{adress}/{vacancy_id}')

@@ -29,7 +29,10 @@ requirements.txt: poetry.lock
 	@poetry export --format requirements.txt --output requirements.txt
 
 celery-worker:
-	@celery -A core worker --loglevel=INFO
+	@poetry run celery --app core worker --loglevel=INFO
+
+flower:
+	@celery --app core flower
 
 shell:
 	poetry run python manage.py shell_plus --print-sql
