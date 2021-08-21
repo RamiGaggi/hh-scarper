@@ -4,7 +4,6 @@ from datetime import datetime
 from random import randint
 
 import requests
-from django.forms import model_to_dict
 from hhscarper.models import Request, Vacancy
 from hhscarper.preprocessor import clean_text, preprocess_text
 

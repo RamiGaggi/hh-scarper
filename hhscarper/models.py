@@ -30,7 +30,7 @@ class Vacancy(TimeStampMixin, models.Model):
     description = models.TextField(max_length=3000)
     key_skills = models.JSONField(null=True)
     lemmas = models.JSONField()
-    request = models.ManyToManyField('Request')
+    request = models.ManyToManyField('Request', through='VacancyRequest')
 
     class Meta:
         verbose_name = _('vacancy')
@@ -70,3 +70,11 @@ class Request(TimeStampMixin, models.Model):
     class Meta:
         verbose_name = _('запрос')
         verbose_name_plural = _('запросы')
+
+
+class VacancyRequest(TimeStampMixin, models.Model):
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    request = models.ForeignKey(Request, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'hhscarper_vacancy_request'
