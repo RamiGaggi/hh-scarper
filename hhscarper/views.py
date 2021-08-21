@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+from hhscarper.mixins import MyLoginRequiredMixin
 from hhscarper.models import Request, Vacancy
 from hhscarper.tasks import scrape_async
 
@@ -24,7 +25,7 @@ class RequestListView(ListView):
     template_name = 'hhscarper/request-list.html'
 
 
-class RequestCreateView(CreateView):
+class RequestCreateView(MyLoginRequiredMixin, CreateView):
     model = Request
     context_object_name = 'request_create'
     template_name = 'hhscarper/request-create.html'
