@@ -156,8 +156,6 @@ logging.basicConfig(
               logging.StreamHandler(sys.stdout)]
 )
 
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("selenium").setLevel(logging.WARNING)
 logging.getLogger("asyncio").setLevel(logging.WARNING)
 
 
