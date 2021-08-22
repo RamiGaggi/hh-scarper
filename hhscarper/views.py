@@ -69,6 +69,15 @@ class RequestDetailView(DetailView):
     context_object_name = 'request_detail'
     template_name = 'hhscarper/request-detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        skill_report_data = self.get_object().skillreport.data
+        context['valuable_skill'] = max(
+            skill_report_data,
+            key=skill_report_data.get,
+        )
+        return context
+
 
 class VacancyListView(ListView):
     model = Vacancy

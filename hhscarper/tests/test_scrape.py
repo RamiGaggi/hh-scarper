@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 import requests_mock
 from dotenv import load_dotenv
-from hhscarper.models import Request, Vacancy, VacancyRequest
+from hhscarper.models import Request, VacancyRequest
 from hhscarper.scarper import scrape
 
 load_dotenv()
@@ -59,11 +59,11 @@ def test_scrape(client, requests):
             adress='https://api-test.hhscarpertest.ru/vacancies',
         )
 
-    vacancy_object = req_obj.vacancy_set.all().get(external_id=000)
+    vacancy_object = req_obj.vacancy_set.get(external_id=000)
 
     assert Request.objects.all().count() == 1
-    assert Vacancy.objects.all().count() == 2
     assert VacancyRequest.objects.all().count() == 2
+    assert req_obj.vacancy_set
 
     assert vacancy_object.title == 'Some title'
     assert vacancy_object.link == 'https://test1.test'

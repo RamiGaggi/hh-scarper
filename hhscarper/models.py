@@ -78,3 +78,17 @@ class VacancyRequest(TimeStampMixin, models.Model):
 
     class Meta:
         db_table = 'hhscarper_vacancy_request'
+
+
+class SkillReport(TimeStampMixin, models.Model):
+    data = models.JSONField()
+    request = models.OneToOneField(
+        Request,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f'SkillReport {self.request.keyword}'
+
+    class Meta:
+        db_table = 'hhscarper_skill_report'
