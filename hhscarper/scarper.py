@@ -26,9 +26,10 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
         page_items = requests.get(page).json()['items']
         time.sleep(randint(3, 6))  # Sleep
         vacancies = (int(vacancy['id']) for vacancy in page_items)
-
+        counter = 0
         for vacancy_id in vacancies:
             logger.info(vacancy_id)
+            counter += 1
             if vacancy_id in db_vacancies:
                 vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)  # noqa: E501
                 vacancy_instance.request.add(request_obj)
@@ -57,3 +58,4 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     request_obj.time = time_delta
     request_obj.status = 'Resolved'
     request_obj.save()
+    return counter

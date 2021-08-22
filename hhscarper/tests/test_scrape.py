@@ -53,7 +53,7 @@ def test_scrape(client, requests):
             'key_skills': [],
             'alternate_url': 'https://tes2.test',
         })
-        scrape(
+        scrape_result = scrape(
             keyword=KEYWORD,
             request_obj_id=req_obj.pk,
             adress='https://api-test.hhscarpertest.ru/vacancies',
@@ -69,3 +69,4 @@ def test_scrape(client, requests):
     assert vacancy_object.link == 'https://test1.test'
     assert vacancy_object.description == 'Magic test'
     assert vacancy_object.key_skills == ['Postgres']
+    assert scrape_result == 2
