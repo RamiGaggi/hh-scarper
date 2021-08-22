@@ -9,7 +9,7 @@
         <th scope="col">{% translate "Название" %}</th>
         <th scope="col">{% translate "Ссылка" %}</th>
         <th scope="col">{% translate "Описание" %}</th>
-        <th scope="col">{% translate "Ключевое слово" %}</th>
+        <th scope="col">{% translate "Дата создания" %}</th>
     </tr>
 {% endblock thead%}
 
@@ -20,7 +20,7 @@
             <td>{{ vacancy.title }}</td>
             <td>{{ vacancy.link }}</td>
             <td>{{ vacancy.description|truncatechars:255 }}</td>
-            <td>{{ vacancy.request_set.keyword }}</td>
+            <td>{{ vacancy.created_at|date:"H:i:s | d/m/y" }}</td>
         </tr>
     {% endfor %}
 {% endblock tbody%}

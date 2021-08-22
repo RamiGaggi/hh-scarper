@@ -10,6 +10,7 @@
         <th scope="col">{% translate "Статус" %}</th>
         <th scope="col">{% translate "Затраченное время" %}</th>
         <th scope="col">{% translate "Дата создания" %}</th>
+        <th scope="col">{% translate "Количество найденных вакансий" %}</th>
     </tr>
 {% endblock thead%}
 
@@ -20,7 +21,8 @@
             <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
             <td>{{ request.status }}</td>
             <td>{{ request.time|time:"H:i:s" }}</td>
-
+            <td>{{ request.created_at|date:"H:i:s | d/m/y" }}</td>
+            <td>{{ request.vacancy_set.count }}</td>
 
         </tr>
     {% endfor %}

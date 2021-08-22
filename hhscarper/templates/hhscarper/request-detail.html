@@ -1,28 +1,55 @@
-{% extends "base.html" %}
+{% extends "list.html" %}
 {% load i18n %}
 
-{% block content %}
+
+{% block before_content %}
     <div class="container my-5 mx-auto">
         <h2>{% translate "Запрос по ключевому слову" %} <strong class="text-danger">{{ request_detail.keyword }}</strong></h2>
         <div class="card text-center my-5">
             <div class="row">
               <div class="col-4">
                 <div class="list-group" id="list-tab" role="tablist">
-                  <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" >{% translate "Количество вакансий" %}</a>
-                  <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
-                  <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-                  <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+                  <a class="list-group-item list-group-item-action active" id="vacancy-count" data-toggle="list" href="#vacancy" role="tab" >{% translate "Количество вакансий" %}</a>
+                  <a class="list-group-item list-group-item-action" id="list-skill-list" data-toggle="list" href="#list-skill" role="tab" aria-controls="skill">{% translate "Самый ценный навык" %}</a>
+                  <a class="list-group-item list-group-item-action" id="list-word-list" data-toggle="list" href="#list-word" role="tab" aria-controls="word">{% translate "Самое часто встречающееся слово" %}</a>
+                  <a class="list-group-item list-group-item-action" id="list-information-list" data-toggle="list" href="#list-information" role="tab" aria-controls="information">{% translate "Дополнительная информация" %}</a>
                 </div>
               </div>
               <div class="col-8">
                 <div class="tab-content" id="nav-tabContent">
-                  <div class="tab-pane fade show active my-5 " id="list-home" role="tabpanel" aria-labelledby="list-home-list">123</div>
-                  <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-                  <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-                  <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+                  <div class="tab-pane fade show active my-5 " id="vacancy" role="tabpanel" aria-labelledby="vacancy-count"><h1 class="display-3">{{ request_detail.vacancy_set.count }}</h1></div>
+                  <div class="tab-pane fade my-5" id="list-skill" role="tabpanel" aria-labelledby="list-skill-list"><h1 class="display-3">Skill</h1></div>
+                  <div class="tab-pane fade my-5" id="list-word" role="tabpanel" aria-labelledby="list-word-list"><h1 class="display-3">Word</h1></div>
+                  <div class="tab-pane fade my-5" id="list-information" role="tabpanel" aria-labelledby="list-information-list"><h1 class="display-3">List</h1></div>
                 </div>
               </div>
             </div>
         </div>
     </div>
 {% endblock %}
+
+
+{% block list-title %}<h2>Самые ценные навыки</h2>{% endblock list-title %}
+{% block thead %}
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">{% translate "Ключевое слово" %}</th>
+        <th scope="col">{% translate "Статус" %}</th>
+        <th scope="col">{% translate "Затраченное время" %}</th>
+        <th scope="col">{% translate "Дата создания" %}</th>
+        <th scope="col">{% translate "Количество найденных вакансий" %}</th>
+    </tr>
+{% endblock thead%}
+
+{% block tbody %}
+    {% for request in request_list %}
+        <tr>
+            <td>{{ request.pk }}</td>
+            <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
+            <td>{{ request.status }}</td>
+            <td>{{ request.time|time:"H:i:s" }}</td>
+            <td>{{ request.created_at }}</td>
+            <td>{{ request.vacancy_set.count }}</td>
+        </tr>
+    {% endfor %}
+{% endblock tbody%}
