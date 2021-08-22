@@ -24,6 +24,7 @@ class RequestListView(ListView):
     model = Request
     context_object_name = 'request_list'
     template_name = 'hhscarper/request-list.html'
+    paginate_by = 10
 
 
 class RequestCreateView(MyLoginRequiredMixin, CreateView):
@@ -73,3 +74,4 @@ class VacancyListView(ListView):
     model = Vacancy
     context_object_name = 'vacancy_list'
     template_name = 'hhscarper/vacancy-list.html'
+    paginate_by = 50

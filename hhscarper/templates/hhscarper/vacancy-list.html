@@ -20,7 +20,7 @@
             <td>{{ vacancy.title }}</td>
             <td>{{ vacancy.link }}</td>
             <td>{{ vacancy.description|truncatechars:255 }}</td>
-            <td>{{ vacancy.created_at|date:"H:i:s | d/m/y" }}</td>
+            <td>{{ vacancy.created_at|date:"H:i:s  d/m/y" }}</td>
         </tr>
     {% endfor %}
 {% endblock tbody%}
