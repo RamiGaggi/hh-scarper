@@ -30,7 +30,7 @@ class Vacancy(TimeStampMixin, models.Model):
     description = models.TextField(max_length=3000)
     key_skills = models.JSONField(null=True)
     lemmas = models.JSONField()
-    request = models.ManyToManyField('Request', through='VacancyRequest')
+    requests = models.ManyToManyField('Request', through='VacancyRequest')
 
     class Meta:
         verbose_name = _('vacancy')
