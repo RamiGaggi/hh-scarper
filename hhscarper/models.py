@@ -32,15 +32,16 @@ class Vacancy(TimeStampMixin, models.Model):
     lemmas = models.JSONField()
     requests = models.ManyToManyField('Request', through='VacancyRequest')
 
-    class Meta:
-        verbose_name = _('vacancy')
-        verbose_name_plural = _('vacancies')
-
     def __str__(self):
         return self.title[:10]
 
     def get_absolute_url(self):
         return reverse('vacancy-detail', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = _('vacancy')
+        verbose_name_plural = _('vacancies')
+        ordering = ['-created_at']
 
 
 class Request(TimeStampMixin, models.Model):
@@ -70,11 +71,15 @@ class Request(TimeStampMixin, models.Model):
     class Meta:
         verbose_name = _('запрос')
         verbose_name_plural = _('запросы')
+        ordering = ['-created_at']
 
 
 class VacancyRequest(TimeStampMixin, models.Model):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.request.keyword} {self.vacancy.title[:10]}'
 
     class Meta:
         db_table = 'hhscarper_vacancy_request'
