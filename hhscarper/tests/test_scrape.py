@@ -45,7 +45,7 @@ def test_scrape(client, requests):
         mock.get(
             PAGE_URL,
             json={
-                'items': [{'id': 000}, {'id': 777}]
+                'items': [{'id': 000}, {'id': 777}],
             },
         )
         mock.get(VACANCY_URL1, json={
