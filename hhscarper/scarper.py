@@ -6,7 +6,7 @@ from random import randint
 import requests
 from hhscarper.models import Request, Vacancy
 from hhscarper.preprocessor import clean_text, preprocess_text
-from hhscarper.reports import make_report, REPORTS
+from hhscarper.reports import REPORTS, make_report
 
 logger = logging.getLogger(__name__)
 
