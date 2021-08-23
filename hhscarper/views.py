@@ -70,12 +70,14 @@ class RequestDetailView(DetailView):
     template_name = 'hhscarper/request-detail.html'
 
     def get_context_data(self, **kwargs):
+        logger.debug(self.__dict__)
         context = super().get_context_data(**kwargs)
-        skill_report_data = self.get_object().skillreport.data
-        context['valuable_skill'] = max(
-            skill_report_data,
-            key=skill_report_data.get,
-        )
+
+        valuable_skill = self.get_object().skillreport.get_most_valuable()
+        valuable_word = self.get_object().wordreport.get_most_valuable()
+
+        context['valuable_word'] = valuable_word
+        context['valuable_skill'] = valuable_skill
         return context
 
 

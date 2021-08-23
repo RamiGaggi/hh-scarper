@@ -18,12 +18,32 @@ class TimeStampMixin(models.Model):
         abstract = True
 
 
+class ReportMixin(models.Model):
+    data = models.JSONField()
+    request = models.OneToOneField(
+        'Request',
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f'{self.request.keyword}'
+
+    def get_most_valuable(self):
+        return max(
+            {**self.data, **{_('Отсутсвует'): 0}},
+            key=self.data.get,
+        )
+
+    class Meta:
+        abstract = True
+
+
 class User(AbstractUser):
     def __str__(self):
         return ' '.join([self.first_name, self.last_name])
 
 
-class Vacancy(TimeStampMixin, models.Model):
+class Vacancy(TimeStampMixin):
     external_id = models.IntegerField(unique=True)
     title = models.CharField(max_length=200)
     link = models.CharField(max_length=200)
@@ -44,7 +64,7 @@ class Vacancy(TimeStampMixin, models.Model):
         ordering = ['-created_at']
 
 
-class Request(TimeStampMixin, models.Model):
+class Request(TimeStampMixin):
     class Status(models.TextChoices):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
@@ -74,7 +94,7 @@ class Request(TimeStampMixin, models.Model):
         ordering = ['-created_at']
 
 
-class VacancyRequest(TimeStampMixin, models.Model):
+class VacancyRequest(TimeStampMixin):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
 
@@ -85,15 +105,17 @@ class VacancyRequest(TimeStampMixin, models.Model):
         db_table = 'hhscarper_vacancy_request'
 
 
-class SkillReport(TimeStampMixin, models.Model):
-    data = models.JSONField()
-    request = models.OneToOneField(
-        Request,
-        on_delete=models.CASCADE,
-    )
-
+class SkillReport(ReportMixin, TimeStampMixin):
     def __str__(self):
         return f'SkillReport {self.request.keyword}'
 
     class Meta:
         db_table = 'hhscarper_skill_report'
+
+
+class WordReport(ReportMixin, TimeStampMixin):
+    def __str__(self):
+        return f'WordReport {self.request.keyword}'
+
+    class Meta:
+        db_table = 'hhscarper_word_report'

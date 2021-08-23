@@ -6,7 +6,7 @@ from random import randint
 import requests
 from hhscarper.models import Request, Vacancy
 from hhscarper.preprocessor import clean_text, preprocess_text
-from hhscarper.reports import make_skill_report
+from hhscarper.reports import make_report
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
 
             description = clean_text(vacancy_data['description'])
             skills = [skill['name'] for skill in vacancy_data['key_skills']]
-            lemmas = list(preprocess_text(description))
+            lemmas = preprocess_text(description)
 
             vacancy_obj = Vacancy.objects.create(
                 external_id=vacancy_data['id'],
@@ -54,7 +54,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
             )
             vacancy_obj.requests.add(request_obj)
 
-    make_skill_report(request_obj_id)
+    make_report(request_obj_id)
 
     delta = datetime.now() - start
     time_delta = (datetime.min + delta).time()
