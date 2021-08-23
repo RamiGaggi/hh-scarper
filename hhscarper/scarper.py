@@ -15,9 +15,10 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     request_obj = Request.objects.get(pk=request_obj_id)
     start = datetime.now()
     url = f'{adress}?per_page=100&text={keyword}'
-    logger.info(url)
+    json_data = requests.get(url).json()
+    num_pages = json_data['pages']  # noqa: E501
+    logger.info(f"found: {json_data['found']}")
 
-    num_pages = requests.get(url).json()['pages']  # noqa: E501
     time.sleep(randint(4, 7))
     base_url = '{0}?per_page=100&text={1}&page={2}'
     pages = (base_url.format(adress, keyword, num) for num in range(num_pages))
@@ -29,7 +30,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
         vacancies = (int(vacancy['id']) for vacancy in page_items)
         counter = 0
         for vacancy_id in vacancies:
-            logger.info(vacancy_id)
+            logger.info(f'vacancy_id: {vacancy_id}')
             counter += 1
             if vacancy_id in db_vacancies:
                 vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)  # noqa: E501

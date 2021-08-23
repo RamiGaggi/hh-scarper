@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import logging
+
 import os
-import sys
 from pathlib import Path
 
 import dj_database_url
@@ -146,18 +145,41 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
-
-logging.basicConfig(
-    level=int(os.getenv('LOG_LEVEL', 10)),
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%H:%M:%S',
-    handlers=[logging.FileHandler(filename=BASE_DIR / 'logs/task_manager.log', mode='a'),
-              logging.StreamHandler(sys.stdout)]
-)
-
-logging.getLogger("asyncio").setLevel(logging.WARNING)
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/task_manager.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': os.getenv('LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+        'django.utils': {
+            'level': 'INFO',
+        },
+        'django.db.backends': {
+        'level': 'INFO',
+        },
+    },
+}
 
 AUTH_USER_MODEL = 'hhscarper.User'
 

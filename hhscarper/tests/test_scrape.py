@@ -35,10 +35,19 @@ def requests():
 def test_scrape(client, requests):
     req_obj = Request.objects.get(keyword=KEYWORD)
     with requests_mock.Mocker() as mock:
-        mock.get(URL_KEYWWORD, json={'pages': 1})
-        mock.get(PAGE_URL, json={'items': [
-            {'id': 000}, {'id': 777},
-        ]})
+        mock.get(
+            URL_KEYWWORD,
+            json={
+                'pages': 1,
+                'found': 234,
+            },
+        )
+        mock.get(
+            PAGE_URL,
+            json={
+                'items': [{'id': 000}, {'id': 777}]
+            },
+        )
         mock.get(VACANCY_URL1, json={
             'id': 000,
             'name': 'Some title',
