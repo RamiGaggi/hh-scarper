@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -10,7 +11,6 @@ from django.views.generic.list import ListView
 from hhscarper.mixins import MyLoginRequiredMixin
 from hhscarper.models import Request, Vacancy
 from hhscarper.tasks import scrape_async
-from django.core.exceptions import ObjectDoesNotExist
 
 logger = logging.getLogger(__name__)
 
