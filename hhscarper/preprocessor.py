@@ -1,4 +1,3 @@
-
 from string import digits, punctuation, whitespace
 
 from bs4 import BeautifulSoup
@@ -6,21 +5,15 @@ from nltk.corpus import stopwords
 from pymystem3 import Mystem
 
 stem = Mystem()
-another_symbols = [  # noqa: WPS317
-    '),', ');', '–', '—', '://', '); ', '.); ',
-]
-tags = ['li', 'ul', 'p', 'strong']
+
 
 STOP_TOKENS = (
     *stopwords.words('russian'),
     *['д', 'т'],
     *stopwords.words('english'),
-    *list(punctuation),
     *list(whitespace),
     *[''],
     *list(digits),
-    *tags,
-    *another_symbols,
 )
 
 
@@ -29,6 +22,19 @@ def clean_text(text):
     return soup.get_text()
 
 
-def preprocess_text(text):
+def preprocess_text(text):  # noqa: WPS231
     tokens = stem.lemmatize(text)
-    return {token.upper() for token in tokens if (token not in STOP_TOKENS and token.strip() not in STOP_TOKENS)}  # noqa: WPS221, E501
+    res = set()
+    flag = True
+
+    for token in tokens:
+        for sym in (*punctuation, *['—', '–', '·', '»', '«']):
+            if sym in token.strip():
+                flag = False
+                break
+
+        if flag and (token not in STOP_TOKENS and token.strip() not in STOP_TOKENS):  # noqa: WPS221, E501
+            res.add(token.upper())
+        flag = True
+
+    return list(res)
