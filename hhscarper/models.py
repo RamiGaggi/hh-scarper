@@ -29,10 +29,8 @@ class ReportMixin(models.Model):
         return f'{self.request.keyword}'
 
     def get_most_valuable(self):
-        return max(
-            {**self.data, **{_('Отсутсвует'): 0}},
-            key=self.data.get,
-        )
+        data = {**self.data, **{_('Отсутствует'): 0}}
+        return max(data, key=data.get)
 
     class Meta:
         abstract = True
