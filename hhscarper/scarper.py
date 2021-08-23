@@ -15,7 +15,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
     request_obj = Request.objects.get(pk=request_obj_id)
     start = datetime.now()
     url = f'{adress}?per_page=100&text={keyword}'
-    logger.debug(url)
+    logger.info(url)
 
     num_pages = requests.get(url).json()['pages']  # noqa: E501
     time.sleep(randint(4, 7))
@@ -33,7 +33,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
             counter += 1
             if vacancy_id in db_vacancies:
                 vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)  # noqa: E501
-                vacancy_instance.request.add(request_obj)
+                vacancy_instance.requests.add(request_obj)
                 continue
 
             vacancy = requests.get(f'{adress}/{vacancy_id}')
@@ -54,7 +54,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
             )
             vacancy_obj.requests.add(request_obj)
 
-    make_report(request_obj_id, REPORTS)
+    make_report(request_obj_id, *REPORTS)
 
     delta = datetime.now() - start
     time_delta = (datetime.min + delta).time()

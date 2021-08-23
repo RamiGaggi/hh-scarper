@@ -1,6 +1,9 @@
+import logging
 from collections import Counter
 
 from hhscarper.models import Request, SkillReport, WordReport
+
+logger = logging.getLogger(__name__)
 
 REPORTS = ('skill', 'word')
 

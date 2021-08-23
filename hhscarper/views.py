@@ -10,6 +10,7 @@ from django.views.generic.list import ListView
 from hhscarper.mixins import MyLoginRequiredMixin
 from hhscarper.models import Request, Vacancy
 from hhscarper.tasks import scrape_async
+from django.core.exceptions import ObjectDoesNotExist
 
 logger = logging.getLogger(__name__)
 
@@ -70,11 +71,13 @@ class RequestDetailView(DetailView):
     template_name = 'hhscarper/request-detail.html'
 
     def get_context_data(self, **kwargs):
-        logger.debug(self.__dict__)
         context = super().get_context_data(**kwargs)
 
-        valuable_skill = self.get_object().skillreport.get_most_valuable()
-        valuable_word = self.get_object().wordreport.get_most_valuable()
+        try:  # noqa: WPS229
+            valuable_skill = self.get_object().skillreport.get_most_valuable()
+            valuable_word = self.get_object().wordreport.get_most_valuable()
+        except ObjectDoesNotExist:
+            valuable_skill = valuable_word = _('Запрос в обработке')
 
         context['valuable_word'] = valuable_word
         context['valuable_skill'] = valuable_skill
