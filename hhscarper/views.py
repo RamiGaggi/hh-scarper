@@ -79,18 +79,22 @@ class RequestDetailView(DetailView):
             valuable_word = req_obj.wordreport.get_most_valuable()
         except ObjectDoesNotExist:
             valuable_skill = valuable_word = _('Запрос в обработке')
+        try:  # noqa: WPS229
+            skill_chart = get_figure(
+                req_obj.skillreport.get_sorted_data(items=10),
+                title=_('Самые востребованные навыки для данного запроса'),
+            )
+            word_chart = get_figure(
+                req_obj.wordreport.get_sorted_data(items=10),
+                title=_('Наиболее упоминаемое слово для данного запроса'),
+            )
+        except ObjectDoesNotExist:
+            info = ('', _('Пожалуйста подождите'))
+            word_chart = info
+            skill_chart = info
 
-        skill_chart = get_figure(
-            req_obj.skillreport.get_sorted_data(items=10),
-            title=_('Самые востребованные навыки для данного запроса'),
-        )
-        skill_script, skill_html = skill_chart
-
-        word_chart = get_figure(
-            req_obj.wordreport.get_sorted_data(items=10),
-            title=_('Наиболее упоминаемое слово для данного запроса'),
-        )
         word_script, word_html = word_chart
+        skill_script, skill_html = skill_chart
 
         context['valuable_word'] = valuable_word
         context['valuable_skill'] = valuable_skill
