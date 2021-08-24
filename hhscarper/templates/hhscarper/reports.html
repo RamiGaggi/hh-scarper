@@ -1,0 +1,19 @@
+<table class="table table-borderless">
+    <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>{{ skill_html|safe  }}</td>
+                <td>{{ word_html|safe  }}</td>
+            </tr
+    </tbody>
+</table>
+
+{% block scripts %}
+    {{ skill_script|safe  }}
+    {{ word_script|safe  }}
+{% endblock %}

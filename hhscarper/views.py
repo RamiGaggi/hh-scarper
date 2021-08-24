@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+from hhscarper.charts import get_figure
 from hhscarper.mixins import MyLoginRequiredMixin
 from hhscarper.models import Request, Vacancy
 from hhscarper.tasks import scrape_async
@@ -72,15 +73,33 @@ class RequestDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        req_obj = self.get_object()
         try:  # noqa: WPS229
-            valuable_skill = self.get_object().skillreport.get_most_valuable()
-            valuable_word = self.get_object().wordreport.get_most_valuable()
+            valuable_skill = req_obj.skillreport.get_most_valuable()
+            valuable_word = req_obj.wordreport.get_most_valuable()
         except ObjectDoesNotExist:
             valuable_skill = valuable_word = _('Запрос в обработке')
 
+        skill_chart = get_figure(
+            req_obj.skillreport.get_sorted_data(items=10),
+            title=_('Самые востребованные навыки для данного запроса'),
+        )
+        skill_script, skill_html = skill_chart
+
+        word_chart = get_figure(
+            req_obj.wordreport.get_sorted_data(items=10),
+            title=_('Наиболее упоминаемое слово для данного запроса'),
+        )
+        word_script, word_html = word_chart
+
         context['valuable_word'] = valuable_word
         context['valuable_skill'] = valuable_skill
+
+        context['skill_script'] = skill_script
+        context['skill_html'] = skill_html
+
+        context['word_script'] = word_script
+        context['word_html'] = word_html
         return context
 
 

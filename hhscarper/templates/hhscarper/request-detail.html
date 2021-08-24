@@ -25,11 +25,21 @@
               </div>
             </div>
         </div>
+        {% include 'hhscarper/reports.html' %}
     </div>
 {% endblock %}
 
 
-{% block list-title %}<h2>Самые ценные навыки</h2>{% endblock list-title %}
+{% block content %}
+
+  
+{% endblock %}
+
+
+
+
+
+{% comment %} {% block list-title %}<h2>Самые ценные навыки</h2>{% endblock list-title %}
 {% block thead %}
     <tr>
         <th scope="col">ID</th>
@@ -52,4 +62,5 @@
             <td>{{ request.vacancy_set.count }}</td>
         </tr>
     {% endfor %}
-{% endblock tbody%}
+{% endblock tbody%} {% endcomment %}
+

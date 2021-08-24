@@ -2,40 +2,13 @@
 {% load i18n %}
 
 {% block content %}
-
 <div class="container my-5 mx-auto">
     <h2>{% translate "Статистика" %}</h2>
             <div class="card my-5">
               <div class="card-header"></div>
                   <div class="card-body">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text"></p>
-                    
+                    <h5 class="card-title">Some text</h5>
+                    <p class="card-text-inline mr-5">Some description</p>
                   </div>
-              </div>
-    <div class="table-responsive">
-        <table class="table  table-hover table-bordered table-sm">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">{% translate "Ключевое слово" %}</th>
-                    <th scope="col">{% translate "Ссылка" %}</th>
-                    <th scope="col">{% translate "Время запроса" %}</th>
-                    <th scope="col">{% translate "Дата обновления" %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in request_list %}
-                    <tr>
-                        <td>{{ request.pk }}</td>
-                        <td>{{ request.search_value }}</td>
-                        <td>{{ request.status }}</td>
-                        <td>{{ request.time }}</td>
-                        <td>{{ request.updated_at }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+            </div>
 {% endblock %}
