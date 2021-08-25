@@ -70,6 +70,7 @@ class Request(TimeStampMixin):
     class Status(models.TextChoices):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
+        error = 'Error', _('Ошибка')
 
     keyword = models.CharField(
         unique=True,

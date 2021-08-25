@@ -26,7 +26,7 @@ def test_request_list(client):
 def test_request_detail(client, initial):
     url = reverse(
         'hhscarper:request-detail',
-        kwargs={'pk': 1},
+        kwargs={'pk': Request.objects.get(keyword='KEYWORD').pk},
     )
     response = client.get(url)
     assert response.status_code == 200

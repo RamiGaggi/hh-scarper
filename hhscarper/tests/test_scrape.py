@@ -89,7 +89,7 @@ def test_scrape(client, initial):
             'key_skills': [],
             'alternate_url': 'https://tes2.test',
         })
-        mock.get(VACANCY_URL4, json={
+        mock.get(VACANCY_URL4, status_code=404, json={
             'id': vacancies['vacancy_id4'],
             'name': 'Another title',
             'description': 'Magic test2',
@@ -105,11 +105,12 @@ def test_scrape(client, initial):
         )
 
     vacancy_object = req_obj.vacancy_set.get(external_id=111)
+    missing_vacancy_object = req_obj.vacancy_set.get(external_id=000)
 
     assert VacancyRequest.objects.count() == 4
     assert req_obj.vacancy_set.count() == 4
     assert Request.objects.count() == 1
-    assert Request.objects.count() == 1
+    assert Vacancy.objects.count() == 4
     assert scrape_result == 4
 
     assert vacancy_object.title == 'Some title'
@@ -118,3 +119,5 @@ def test_scrape(client, initial):
     assert 'Postgres' in vacancy_object.key_skills
     assert 'MAGIC' in vacancy_object.lemmas
     assert 'TEST' in vacancy_object.lemmas
+
+    assert missing_vacancy_object.title == 'Missing'
