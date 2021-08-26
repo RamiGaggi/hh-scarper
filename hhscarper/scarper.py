@@ -28,13 +28,12 @@ def get_vacancy_info(  # noqa: WPS231, C901
         # Check for update if there is need to update existing vacancies
         # Check if vacancy info is missing, so we can proceed further
         if prefetch_vacancy and not (is_missing or update):
-            logger.info(f'Get vacancy from databse - vacancy_id: {vacancy_id}')
+            logger.info('Get vacancy from databse ^')
             vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)
             vacancy_instance.requests.add(request_obj)
             continue
 
         url = f'{adress}/{vacancy_id}'
-        # Maybe need sleep
         vacancy = requests.get(url)
         if vacancy.status_code == 200:
             vacancy_data = vacancy.json()
