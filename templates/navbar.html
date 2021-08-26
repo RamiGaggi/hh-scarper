@@ -13,16 +13,5 @@
               <a class="nav-link {% if "vacancies" in request.path %}active{% endif %}" href="{% url 'hhscarper:vacancy-list' %}">{% translate "Вакансии" %}</a>
             </li>
         </ul>
-        {% comment %}
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>{% translate "Отчеты" %}</span>
-          <a class="link-secondary" href="#" >
-          </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Cтатистика по используемым словам</a>
-        </ul>
-        {% endcomment %}
     </div>
 </nav>
