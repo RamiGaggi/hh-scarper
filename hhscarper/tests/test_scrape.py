@@ -5,7 +5,7 @@ import pytest
 import requests_mock
 from dotenv import load_dotenv
 from hhscarper.models import Request, Vacancy, VacancyRequest
-from hhscarper.scarper import scrape
+from hhscarper.scarper import get_vacancy_info, scrape
 
 load_dotenv()
 
@@ -70,29 +70,29 @@ def test_scrape(client, initial):
         )
         mock.get(VACANCY_URL1, json={
             'id': vacancies['vacancy_id1'],
-            'name': 'Some title',
-            'description': 'Magic test',
+            'name': 'Some title1',
+            'description': 'Magic test1',
             'key_skills': [{'name': 'Postgres'}],
             'alternate_url': 'https://test1.test',
         })
         mock.get(VACANCY_URL2, json={
             'id': vacancies['vacancy_id2'],
-            'name': 'Another title',
+            'name': 'Another title2',
             'description': 'Magic test2',
             'key_skills': [],
             'alternate_url': 'https://tes2.test',
         })
         mock.get(VACANCY_URL3, json={
             'id': vacancies['vacancy_id3'],
-            'name': 'Another title',
-            'description': 'Magic test2',
+            'name': 'Another title3',
+            'description': 'Magic test3',
             'key_skills': [],
             'alternate_url': 'https://tes2.test',
         })
         mock.get(VACANCY_URL4, status_code=404, json={
             'id': vacancies['vacancy_id4'],
-            'name': 'Another title',
-            'description': 'Magic test2',
+            'name': 'Another title4',
+            'description': 'Magic test4',
             'key_skills': [],
             'alternate_url': 'https://tes2.test',
         })
@@ -104,20 +104,49 @@ def test_scrape(client, initial):
             adress='https://api-test.hhscarpertest.ru/vacancies',
         )
 
-    vacancy_object = req_obj.vacancy_set.get(external_id=111)
-    missing_vacancy_object = req_obj.vacancy_set.get(external_id=000)
+        vacancy_object = req_obj.vacancy_set.get(external_id=111)
+        missing_vacancy_object = req_obj.vacancy_set.get(external_id=000)
 
-    assert VacancyRequest.objects.count() == 4
-    assert req_obj.vacancy_set.count() == 4
-    assert Request.objects.count() == 1
-    assert Vacancy.objects.count() == 4
-    assert scrape_result == 4
+        assert VacancyRequest.objects.count() == 4
+        assert req_obj.vacancy_set.count() == 4
+        assert Request.objects.count() == 1
+        assert Vacancy.objects.count() == 4
+        assert scrape_result == 4
 
-    assert vacancy_object.title == 'Some title'
-    assert vacancy_object.link == 'https://test1.test'
-    assert vacancy_object.description == 'Magic test'
-    assert 'Postgres' in vacancy_object.key_skills
-    assert 'MAGIC' in vacancy_object.lemmas
-    assert 'TEST' in vacancy_object.lemmas
+        assert vacancy_object.title == 'Some title1'
+        assert vacancy_object.link == 'https://test1.test'
+        assert vacancy_object.description == 'Magic test1'
+        assert 'Postgres' in vacancy_object.key_skills
+        assert 'MAGIC' in vacancy_object.lemmas
+        assert 'TEST1' in vacancy_object.lemmas
 
-    assert missing_vacancy_object.title == 'Missing'
+        assert missing_vacancy_object.is_missing
+        # Test for updateing
+        mock.get(VACANCY_URL1, json={
+            'id': vacancies['vacancy_id1'],
+            'name': 'Update Some title1',
+            'description': 'Update Magic test1',
+            'key_skills': [{'name': 'Postgres'}],
+            'alternate_url': 'https://test1.test',
+        })
+        mock.get(VACANCY_URL4, status_code=200, json={
+            'id': vacancies['vacancy_id4'],
+            'name': 'Update',
+            'description': 'Update desc',
+            'key_skills': [{'name': 'Update'}],
+            'alternate_url': 'https://update.test',
+        })
+
+        vacancy_info_result = get_vacancy_info(
+            Request.objects.get(keyword=KEYWORD),
+            (vac.external_id for vac in Vacancy.objects.all()),
+            adress='https://api-test.hhscarpertest.ru/vacancies',
+            update=True,
+        )
+
+        assert VacancyRequest.objects.count() == 4
+        update_missing_vacancy_obj = req_obj.vacancy_set.get(external_id=000)
+        update_existing_vacancy_obj = req_obj.vacancy_set.get(external_id=111)
+        assert update_missing_vacancy_obj.title == 'Update'
+        assert update_existing_vacancy_obj.description == 'Update Magic test1'
+        assert vacancy_info_result == 4
