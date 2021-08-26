@@ -28,6 +28,7 @@ def get_vacancy_info(  # noqa: WPS231, C901
         # Check for update if there is need to update existing vacancies
         # Check if vacancy info is missing, so we can proceed further
         if prefetch_vacancy and not (is_missing or update):
+            logger.info(f'Get vacancy from databse - vacancy_id: {vacancy_id}')
             vacancy_instance = Vacancy.objects.get(external_id=vacancy_id)
             vacancy_instance.requests.add(request_obj)
             continue
@@ -73,12 +74,14 @@ def get_vacancy_info(  # noqa: WPS231, C901
 
 
 def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
+    logger.info(f'Keyword is: {keyword}')
     request_obj = Request.objects.get(pk=request_obj_id)
     start = datetime.now()
     url = f'{adress}?per_page=100&text={keyword}'
     json_data = requests.get(url).json()
 
     num_pages = json_data['pages']
+    logger.info(f'Pages: {num_pages}')
     logger.info(f"found: {json_data['found']}")
 
     base_url = '{0}?per_page=100&text={1}&page={2}'
@@ -86,7 +89,7 @@ def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
 
     counter = 0
     for page in pages:
-        # Maybe need sleep
+        logger.info(f'Page is: {page}')
         page_items = requests.get(page).json()['items']
         vacancies = (int(vacancy['id']) for vacancy in page_items)
 
