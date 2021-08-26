@@ -53,6 +53,7 @@ class Vacancy(TimeStampMixin):
     key_skills = models.JSONField(null=True)
     lemmas = models.JSONField()
     requests = models.ManyToManyField('Request', through='VacancyRequest')
+    is_missing = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title[:10]
