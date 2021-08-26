@@ -18,11 +18,15 @@ STOP_TOKENS = (
 
 
 def clean_text(text):
+    if not text:
+        return ''
     soup = BeautifulSoup(text, 'html.parser')
     return soup.get_text()
 
 
 def preprocess_text(text):  # noqa: WPS231
+    if not text:
+        return ''
     tokens = stem.lemmatize(text)
     res = set()
     flag = True
