@@ -21,6 +21,19 @@ class DashoardView(ListView):
     context_object_name = 'request_list'
     template_name = 'hhscarper/dashboard.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vacancy_count = Vacancy.objects.count()
+        vacancy_last = Vacancy.objects.last()
+        request_count = Request.objects.count()
+        request_last = Request.objects.last()
+
+        context['vacancy_last'] = vacancy_last
+        context['request_last'] = request_last
+        context['vacancy_count'] = vacancy_count
+        context['request_count'] = request_count
+        return context
+
 
 class RequestListView(ListView):
     model = Request

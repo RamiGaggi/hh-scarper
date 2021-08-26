@@ -4,11 +4,28 @@
 {% block content %}
 <div class="container my-5 mx-auto">
     <h2>{% translate "Статистика" %}</h2>
-            <div class="card my-5">
-              <div class="card-header"></div>
-                  <div class="card-body">
-                    <h5 class="card-title">Some text</h5>
-                    <p class="card-text-inline mr-5">Some description</p>
-                  </div>
+        <div class="card-group">
+            <div class="card border-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{% translate "Всего сделано запросов" %}</h5>
+                    <p class="card-text"><h1 class="display-3">{{ request_count }}</h1></p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            {% translate "Последний запрос в" %} {{ request_last.created_at|date:"H:i:s | d/m/y" }}
+                        </small>
+                    </p>
+                </div>
             </div>
+            <div class="card border-danger mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">{% translate "Всего найдено вакансий" %}</h5>
+                  <p class="card-text"><h1 class="display-3">{{ vacancy_count }}</h1></p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            {% translate "Последняя найденная вакансия в" %} {{ vacancy_last.created_at|date:"H:i:s | d/m/y" }}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
 {% endblock %}
