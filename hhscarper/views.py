@@ -1,16 +1,19 @@
 import logging
 
 from django.contrib import messages
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.charts import get_figure
 from hhscarper.mixins import MyLoginRequiredMixin
-from hhscarper.models import Request, Vacancy
+from hhscarper.models import Request, User, Vacancy
 from hhscarper.tasks import scrape_async
 
 logger = logging.getLogger(__name__)
@@ -39,7 +42,7 @@ class RequestListView(ListView):
     model = Request
     context_object_name = 'request_list'
     template_name = 'hhscarper/request-list.html'
-    paginate_by = 10
+    paginate_by = 20
 
 
 class RequestCreateView(MyLoginRequiredMixin, CreateView):
@@ -71,7 +74,7 @@ class RequestCreateView(MyLoginRequiredMixin, CreateView):
             req_id = Request.objects.get(keyword=keyword).pk
             messages.add_message(
                 self.request,
-                messages.INFO,
+                messages.WARNING,
                 _('Запрос с таким ключевым словом уже есть'),
             )
             return redirect('hhscarper:request-detail', req_id)
@@ -94,11 +97,11 @@ class RequestDetailView(DetailView):
             valuable_skill = valuable_word = _('Запрос в обработке')
         try:  # noqa: WPS229
             skill_chart = get_figure(
-                req_obj.skillreport.get_sorted_data(items=10),
+                req_obj.skillreport.get_data(items=10),
                 title=_('Самые востребованные навыки для данного запроса'),
             )
             word_chart = get_figure(
-                req_obj.wordreport.get_sorted_data(items=10),
+                req_obj.wordreport.get_data(items=10),
                 title=_('Наиболее упоминаемое слово для данного запроса'),
             )
         except ObjectDoesNotExist:
@@ -125,3 +128,24 @@ class VacancyListView(ListView):
     context_object_name = 'vacancy_list'
     template_name = 'hhscarper/vacancy-list.html'
     paginate_by = 50
+
+
+class UserLoginView(SuccessMessageMixin, LoginView):
+    model = User
+    template_name = 'hhscarper/user-login.html'
+    extra_context = {'next': reverse_lazy('hhscarper:request-list')}
+    fields = ['username', 'password']
+    success_message = gettext_lazy('Вход успешно выполнен')
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('hhscarper:user-login')
+
+    def dispatch(self, request, *args, **kwargs):
+        next_page = super().dispatch(request, *args, **kwargs)
+        messages.add_message(
+            self.request,
+            messages.INFO,
+            _('Выход успешно выполнен'),
+        )
+        return next_page

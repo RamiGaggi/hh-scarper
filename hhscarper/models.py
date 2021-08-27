@@ -32,8 +32,11 @@ class ReportMixin(models.Model):
         data = {**self.data, **{_('Отсутствует'): 0}}
         return max(data, key=data.get)
 
-    def get_sorted_data(self, items=None):
-        data = sorted(self.data.items(), key=lambda item: -item[1])[:items]
+    def get_data(self, items=None, order='desc'):  # noqa: WPS615
+        order_flag = -1
+        if order == 'asc':
+            order_flag = 1
+        data = sorted(self.data.items(), key=lambda item: order_flag * item[1])[:items]
         return dict(data)
 
     class Meta:

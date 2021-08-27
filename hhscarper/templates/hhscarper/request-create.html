@@ -3,8 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="container my-5 mx-auto">
-        <h2>{% translate "Создание запроса" %}</h2>
+    <h2>{% translate "Создание запроса" %}</h2>
     <form method="post">{% csrf_token %}
         {% bootstrap_form form %}
         <input class="btn btn-primary" type="submit" value="{% translate "Создать" %}">

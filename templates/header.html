@@ -5,10 +5,18 @@
     <form class="form-inline w-100" action="{% url 'hhscarper:request-create' %}"  method="post">{% csrf_token %}
         <div class="ml-5"></div>
         <div class="ml-5"></div>
-        
-        <input class="form-control ml-5 w-50"  type="text" name="keyword" placeholder="{% translate "Введите ключевое слово" %}">
-
-        <a class="nav-link px-3 w-10" href="#" ><input class="btn btn-danger" type="submit" value="Создать запрос"></button></a>
+        {% if user.is_authenticated %}
+            <input class="form-control ml-5 w-50" type="text" name="keyword" placeholder="{% translate "Введите ключевое слово" %}">
+        {% else %}
+            <input class="form-control ml-5 w-50" type="text" name="keyword" placeholder="{% translate "Получите доступ для отправки запроса" %}" readonly>
+        {% endif %}
+        <a class="nav-link px-3 w-10" href="#" >
+        {% if user.is_authenticated %}
+            <input class="btn btn-danger" type="submit" value="Создать запрос">
+        {% else %}
+            <a  class="btn btn-secondary" href="{% url 'hhscarper:user-login' %}">{% translate "Получить доступ" %}</a>
+        {% endif %}
+        </a>
     </form>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

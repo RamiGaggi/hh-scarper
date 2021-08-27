@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block content %}
+    <h2>{% translate "Вход в систему" %}</h2>
+    <form method="post">{% csrf_token %}
+        {% bootstrap_form form %}
+        <input class="btn btn-primary" type="submit" value="{% translate "Войти" %}">
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+    <div class="card my-3">
+        <div class="card-body">
+            <p class="card-text">{% translate "Для получения доступа обратитесть:" %}</p>
+            <p class="card-text">Email: rami.gaggi@gmail.com </br>TG: RamilGN</p>
+        </div>
+    </div>
+{% endblock %}
