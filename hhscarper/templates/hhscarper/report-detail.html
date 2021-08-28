@@ -1,0 +1,20 @@
+{% extends "list.html" %}
+{% load i18n %}
+
+
+{% block list-title %}<h2>{{ title }}</h2>{% endblock list-title %}
+{% block thead %}
+    <tr>
+        <th scope="col">{% translate "Описание" %}</th>
+        <th scope="col">{% translate "Количество" %}</th>
+    </tr>
+{% endblock thead%}
+
+{% block tbody %}
+    {% for key, val in page_obj %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ val }}</td>
+        </tr>
+    {% endfor %}
+{% endblock tbody%}
