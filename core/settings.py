@@ -140,10 +140,14 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': BASE_DIR / 'logs/task_manager.log',
             'formatter': 'verbose',
@@ -152,12 +156,13 @@ LOGGING = {
             'when': 'D',
         },
         'console': {
-            'level': 'INFO',
+            'level': os.getenv('LOG_LEVEL', 'INFO'),
+            'formatter': 'simple',
             'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
-        'django': {
+        '': {
             'handlers': ['file', 'console'],
             'level': os.getenv('LOG_LEVEL', 'INFO'),
             'propagate': True,
