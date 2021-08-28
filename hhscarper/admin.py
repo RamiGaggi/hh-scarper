@@ -1,7 +1,13 @@
 from django.contrib import admin
-from hhscarper.models import Request, SkillReport, User, Vacancy
+from hhscarper import models
 
-admin.site.register(User)
-admin.site.register(Vacancy)
-admin.site.register(Request)
-admin.site.register(SkillReport)
+admin.site.register(
+    (
+        models.User,
+        models.Vacancy,
+        models.Request,
+        models.SkillReport,
+        models.WordReport,
+        models.VacancyRequest,
+    ),
+)
