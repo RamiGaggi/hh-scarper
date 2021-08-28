@@ -65,8 +65,6 @@ class Vacancy(TimeStampMixin):
         return reverse('vacancy-detail', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = _('vacancy')
-        verbose_name_plural = _('vacancies')
         ordering = ['-created_at']
 
 
@@ -96,8 +94,6 @@ class Request(TimeStampMixin):
         return reverse('hhscarper:request-detail', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = _('запрос')
-        verbose_name_plural = _('запросы')
         ordering = ['-created_at']
 
 
