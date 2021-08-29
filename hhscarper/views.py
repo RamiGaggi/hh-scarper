@@ -195,15 +195,16 @@ class ExportData(View):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='text/csv; charset=utf-8')
         response.write(codecs.BOM_UTF8)
-        query_dict = request.GET
-        report = query_dict.get('report')
-        requests = query_dict.get('request')
 
+        query_dict = request.GET
+
+        report = query_dict.get('report')
+        requests = query_dict.getlist('request')
+        logger.debug(requests)
         if report in REPORTS and requests:
-            requests_lst = requests.split()
-            self.write_csv(requests_lst, report, response)
+            self.write_csv(requests, report, response)
             response['Content-Disposition'] = (
-                f'attachment; filename="{requests_lst[0]}_{report}.csv"'
+                f'attachment; filename="{requests[0]}_{report}.csv"'
             )
 
         return response
