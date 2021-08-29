@@ -1,12 +1,15 @@
+import logging
 from datetime import datetime
 
 import pytest
 from django.urls import reverse
 from hhscarper.models import Request, SkillReport, WordReport
 
+logger = logging.getLogger(__name__)
+
 
 @pytest.fixture
-def initial():
+def data():
     time = datetime.now().time()
     Request.objects.create(
         keyword='KEYWORD_PENDING',
@@ -27,6 +30,18 @@ def initial():
         request=Request.objects.get(keyword='KEYWORD_RESOLVED'),
     )
 
+    data = {
+        'request_pending': Request.objects.get(keyword='KEYWORD_PENDING'),
+        'request_resolved': Request.objects.get(keyword='KEYWORD_RESOLVED'),
+    }
+    data.update(
+        {
+            'skillreport': SkillReport.objects.get(request=data['request_resolved']),
+            'wordreport': WordReport.objects.get(request=data['request_resolved']),
+        },
+    )
+    return data
+
 
 @pytest.mark.django_db
 def test_request_list(client):
@@ -36,16 +51,16 @@ def test_request_list(client):
 
 
 @pytest.mark.django_db
-def test_request_detail(client, initial):
+def test_request_detail(client, data):
     url = reverse(
         'hhscarper:request-detail',
-        kwargs={'pk': Request.objects.get(keyword='KEYWORD_PENDING').pk},
+        kwargs={'pk': data['request_pending'].pk},
     )
     response_pending = client.get(url)
     assert response_pending.status_code == 302
     url = reverse(
         'hhscarper:request-detail',
-        kwargs={'pk': Request.objects.get(keyword='KEYWORD_RESOLVED').pk},
+        kwargs={'pk': data['request_resolved'].pk},
     )
     response_resolved = client.get(url)
     assert response_resolved.status_code == 200
@@ -59,7 +74,29 @@ def test_dashboard(client):
 
 
 @pytest.mark.django_db
-def test_vacancy_list(client):
-    url = reverse('hhscarper:vacancy-list')
+def test_skillreport_detail(client, data):
+    url = reverse(
+        'hhscarper:skill-report-detail',
+        kwargs={'pk': data['skillreport'].pk},
+    )
     response = client.get(url)
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_wordreport_detail(client, data):
+    url = reverse(
+        'hhscarper:word-report-detail',
+        kwargs={'pk': data['wordreport'].pk},
+    )
+    response = client.get(url)
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_export_data(client, data):
+    req_name = data['request_resolved'].keyword
+    url = f"{reverse('hhscarper:export-data')}?report=skill&request={req_name}"
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.get('Content-Disposition') == f'attachment; filename="{req_name}_skill.csv"'

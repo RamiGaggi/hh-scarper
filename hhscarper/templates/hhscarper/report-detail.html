@@ -2,7 +2,12 @@
 {% load i18n %}
 
 
-{% block list-title %}<h2>{{ title }}</h2>{% endblock list-title %}
+{% block list-title %}<h2>{{ title }}: {{ report_data_len }} {% translate "Записей" %} </h2>{% endblock list-title %}
+{% block extra-top %}
+    <a href="{% url 'hhscarper:export-data' %}?report={{ report_type }}&request={{ report.request.keyword }}">
+        {% translate "Скачать данные" %}
+    </a>
+{% endblock extra-top %}
 {% block thead %}
     <tr>
         <th scope="col">{% translate "Описание" %}</th>

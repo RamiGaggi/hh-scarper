@@ -24,14 +24,18 @@ class ReportView(DetailView):
     context_object_name = 'report'
     title = None
     paginate_by = 50
+    report_type = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         page = self.request.GET.get('page')
-        data = Paginator(tuple(self.get_object().get_data().items()), self.paginate_by)
+        prep_data = tuple(self.get_object().get_data().items())
+        data = Paginator(prep_data, self.paginate_by)
         context['page_obj'] = data.get_page(page)
 
         context['report_data'] = self.get_object().get_data()
+        context['report_data_len'] = len(prep_data)
         context['title'] = self.title
+        context['report_type'] = self.report_type
         return context

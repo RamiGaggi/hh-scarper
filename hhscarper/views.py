@@ -1,18 +1,23 @@
+import codecs
+import csv
 import logging
 
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
+from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from hhscarper.charts import get_figure
 from hhscarper.mixins import MyLoginRequiredMixin, ReportView
 from hhscarper.models import Request, SkillReport, User, Vacancy, WordReport
+from hhscarper.reports import REPORTS
 from hhscarper.tasks import scrape_async
 
 logger = logging.getLogger(__name__)
@@ -148,11 +153,13 @@ class RequestDetailView(DetailView):
 class SkillReportDetailView(ReportView):
     model = SkillReport
     title = gettext_lazy('Ключевые навыки')
+    report_type = 'skill'
 
 
 class WordReportDetailView(ReportView):
     model = WordReport
     title = gettext_lazy('Статистика по словам')
+    report_type = 'word'
 
 
 class VacancyListView(ListView):
@@ -181,3 +188,43 @@ class UserLogoutView(LogoutView):
             _('Выход успешно выполнен'),
         )
         return next_page
+
+
+class ExportData(View):
+
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response.write(codecs.BOM_UTF8)
+        query_dict = request.GET
+        report = query_dict.get('report')
+        requests = query_dict.get('request')
+
+        if report in REPORTS and requests:
+            requests_lst = requests.split()
+            self.write_csv(requests_lst, report, response)
+            response['Content-Disposition'] = (
+                f'attachment; filename="{requests_lst[0]}_{report}.csv"'
+            )
+
+        return response
+
+    @staticmethod
+    def write_csv(requests, report, response):  # noqa: WPS602
+        writer = csv.writer(response)
+        writer.writerow([_('Запрос'), _('Описание'), _('Количество')])
+        counter = 0
+        for req in requests:
+            try:
+                req_obj = Request.objects.get(keyword=req)
+            except Request.DoesNotExist:
+                logger.debug(req)
+                continue
+
+            if report == 'skill':
+                for key1, val1 in req_obj.skillreport.get_data().items():
+                    writer.writerow([req, key1, val1])
+                    counter += 1
+            elif report == 'word':
+                for key2, val2 in req_obj.wordreport.get_data().items():
+                    writer.writerow([req, key2, val2])
+        return counter

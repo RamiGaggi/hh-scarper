@@ -121,7 +121,7 @@ def test_scrape(client, initial):
         assert 'TEST1' in vacancy_object.lemmas
 
         assert missing_vacancy_object.is_missing
-        # Test for updateing
+        # Test for updating
         mock.get(VACANCY_URL1, json={
             'id': vacancies['vacancy_id1'],
             'name': 'Update Some title1',
