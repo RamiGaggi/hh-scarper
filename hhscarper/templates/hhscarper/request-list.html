@@ -19,7 +19,17 @@
         <tr>
             <td>{{ request.pk }}</td>
             <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
-            <td>{{ request.status }}</td>
+            <td>
+                {% with request.status as req_status  %}
+                    {% if req_status == "Resolved" %}
+                        <img src="{% static 'img/check-circle.svg' %}"  alt="{{ req_status }}">
+                    {% elif  req_status == "Pending" %}
+                        <img src="{% static 'img/stopwatch.svg' %}"  alt="{{ req_status }}">
+                    {% else %}
+                        <img src="{% static 'img/exclamation-triangle.svg' %}"  alt="{{ req_status }}">
+                    {% endif %}
+                {% endwith %}
+            </td>
             <td>{{ request.time|time:"H:i:s" }}</td>
             <td>{{ request.created_at|date:"H:i:s | d/m/y" }}</td>
             <td>{{ request.vacancy_set.count }}</td>
