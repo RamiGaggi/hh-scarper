@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic.detail import DetailView
+from django_filters.views import FilterView
 
 logger = logging.getLogger(__name__)
 
@@ -38,4 +39,15 @@ class ReportView(DetailView):
         context['report_data_len'] = len(prep_data)
         context['title'] = self.title
         context['report_type'] = self.report_type
+        return context
+
+
+class MyFilterView(FilterView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = dict(self.request.GET)
+        query.pop('page', None)
+        query_string = '&'.join(f'{key}={val[0]}' for key, val in query.items())
+        context['saved_qs'] = '&' + query_string  # noqa: WPS336
         return context

@@ -35,13 +35,13 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}">{% translate "Предыдущая" %}</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{{ saved_qs }}">{% translate "Предыдущая" %}</a>
                     {% endif %}
                     <span class="current">
                         {% translate "Страница" %} {{ page_obj.number }} {% translate "из" %} {{ page_obj.paginator.num_pages }}
                     </span>
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">{% translate "Следующая" %}</a>
+                        <a href="?page={{ page_obj.next_page_number }}{{ saved_qs }}">{% translate "Следующая" %}</a>
                     {% endif %}
                 </span>
             </div>
