@@ -1,9 +1,17 @@
 {% extends "list.html" %}
+{% load bootstrap4 %}
 {% load i18n %}
 {% load static %}
 
 {% block list-title %}<h2>{% translate "Список запросов" %}</h2>{% endblock list-title %}
-
+{% block extra-top %}
+<form method="get">
+    <div class="form-group">
+        {% bootstrap_form filter.form %}
+        <input class="btn btn-primary mx-auto my-1" type="submit" value="{% translate "Найти" %}">
+    </div>
+</form>
+{% endblock extra-top %}
 {% block thead %}
     <tr>
         <th scope="col">ID</th>

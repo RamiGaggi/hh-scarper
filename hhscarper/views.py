@@ -14,7 +14,9 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
+from django_filters.views import FilterView
 from hhscarper.charts import get_figure
+from hhscarper.filters import RequestFilter, VacancyFilter
 from hhscarper.mixins import MyLoginRequiredMixin, ReportView
 from hhscarper.models import Request, SkillReport, User, Vacancy, WordReport
 from hhscarper.reports import REPORTS
@@ -42,11 +44,12 @@ class DashoardView(ListView):
         return context
 
 
-class RequestListView(ListView):
+class RequestListView(FilterView):
     model = Request
     context_object_name = 'request_list'
     template_name = 'hhscarper/request-list.html'
     paginate_by = 20
+    filterset_class = RequestFilter
 
 
 class RequestCreateView(MyLoginRequiredMixin, CreateView):
@@ -177,11 +180,12 @@ class WordReportDetailView(ReportView):
     report_type = 'word'
 
 
-class VacancyListView(ListView):
+class VacancyListView(FilterView):
     model = Vacancy
     context_object_name = 'vacancy_list'
     template_name = 'hhscarper/vacancy-list.html'
     paginate_by = 50
+    filterset_class = VacancyFilter
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
