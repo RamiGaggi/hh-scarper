@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 from django.views import View
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
 from hhscarper.charts import get_figure
 from hhscarper.mixins import MyLoginRequiredMixin, ReportView
@@ -148,6 +148,21 @@ class RequestDetailView(DetailView):
         context['skill_report_id'] = req_obj.skillreport.pk
         context['word_report_id'] = req_obj.wordreport.pk
         return context
+
+
+class RequestDeleteView(MyLoginRequiredMixin, DeleteView):
+    model = Request
+    success_url = reverse_lazy('hhscarper:request-list')
+    template_name = 'hhscarper/request-delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _('Запрос успешно удален'),
+        )
+        return response
 
 
 class SkillReportDetailView(ReportView):

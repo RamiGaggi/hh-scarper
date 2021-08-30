@@ -3,13 +3,18 @@ from datetime import datetime
 
 import pytest
 from django.urls import reverse
-from hhscarper.models import Request, SkillReport, WordReport
+from hhscarper.models import Request, SkillReport, User, WordReport
 
 logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
 def data():
+    credentials = {
+        'username': 'RamilGG',
+        'password': 'asd_asAFS34',
+    }
+    User.objects.create_user(**credentials)
     time = datetime.now().time()
     Request.objects.create(
         keyword='KEYWORD_PENDING',
@@ -33,6 +38,7 @@ def data():
     data = {
         'request_pending': Request.objects.get(keyword='KEYWORD_PENDING'),
         'request_resolved': Request.objects.get(keyword='KEYWORD_RESOLVED'),
+        'credentials': credentials,
     }
     data.update(
         {
@@ -64,6 +70,22 @@ def test_request_detail(client, data):
     )
     response_resolved = client.get(url)
     assert response_resolved.status_code == 200
+
+
+@pytest.mark.django_db
+def test_request_delete(client, data):
+    url_login = reverse('hhscarper:user-login')
+    response_login = client.post(url_login, data['credentials'])
+    assert response_login.status_code == 302
+
+    url = reverse(
+        'hhscarper:request-delete',
+        kwargs={'pk': data['request_resolved'].pk},
+    )
+    response_resolved = client.post(url)
+    with pytest.raises(Request.DoesNotExist):
+        Request.objects.get(pk=data['request_resolved'].pk)
+    assert response_resolved.status_code == 302
 
 
 @pytest.mark.django_db

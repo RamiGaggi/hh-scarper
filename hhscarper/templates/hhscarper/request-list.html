@@ -1,5 +1,6 @@
 {% extends "list.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block list-title %}<h2>{% translate "Список запросов" %}</h2>{% endblock list-title %}
 
@@ -11,6 +12,7 @@
         <th scope="col">{% translate "Затраченное время" %}</th>
         <th scope="col">{% translate "Дата создания" %}</th>
         <th scope="col">{% translate "Количество найденных вакансий" %}</th>
+        <th scope="col"></th>
     </tr>
 {% endblock thead%}
 
@@ -33,6 +35,9 @@
             <td>{{ request.time|time:"H:i:s" }}</td>
             <td>{{ request.created_at|date:"H:i:s | d/m/y" }}</td>
             <td>{{ request.vacancy_set.count }}</td>
+            <td>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'hhscarper:request-delete' request.pk %}"><img src="{% static 'img/trash.svg' %}"  alt="trash"> {% translate "Удалить" %}</a>
+            </td>
 
         </tr>
     {% endfor %}
