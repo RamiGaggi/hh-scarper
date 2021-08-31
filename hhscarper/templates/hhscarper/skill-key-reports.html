@@ -1,0 +1,26 @@
+{% load i18n %}
+
+<table class="table">
+    <tr>
+        <th scope="col" colspan="2" class="text-center">
+            <a class="btn btn-warning btn-sm" href="{% url 'hhscarper:skill-report-detail' skill_report_id %}">
+                {% translate "Ключевые навыки: посмотреть подробно" %}
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <td>{{ desc_skill_html|safe  }}</td>
+        <td>{{ asc_skill_html|safe  }}</td>
+    </tr>
+    <tr>
+        <th scope="col" colspan="2" class="text-center">
+            <a class="btn btn-warning btn-sm" href="{% url 'hhscarper:word-report-detail' word_report_id %}">
+                {% translate "Статистика по словам: посмотреть подробно" %}
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <td>{{ desc_word_html|safe  }}</td>
+        <td>{{ asc_word_html|safe  }}</td>
+    </tr>
+</table>

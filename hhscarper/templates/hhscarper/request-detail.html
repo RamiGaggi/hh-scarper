@@ -25,6 +25,13 @@
               </div>
             </div>
         </div>
-        {% include 'hhscarper/reports.html' %}
+        {% include "hhscarper/skill-key-reports.html" %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ desc_skill_script|safe  }}
+    {{ asc_skill_script|safe  }}
+    {{ desc_word_script|safe  }}
+    {{ asc_word_script|safe  }}
 {% endblock %}

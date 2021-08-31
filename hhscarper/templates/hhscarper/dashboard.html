@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+
 {% block content %}
 <div class="container my-5 mx-auto">
     <h2>{% translate "Статистика" %}</h2>
-        <div class="card-group">
+        {{ dashboard_html|safe }}
+        <div class="card-group my-3">
             <div class="card border-danger mb-3">
                 <div class="card-body">
                     <h5 class="card-title">{% translate "Всего сделано запросов" %}</h5>
@@ -28,4 +30,8 @@
                 </div>
             </div>
         </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ dashboard_script|safe  }}
 {% endblock %}

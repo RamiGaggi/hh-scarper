@@ -14,7 +14,7 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView
 from django.views.generic.list import ListView
-from hhscarper.charts import get_figure
+from hhscarper.charts import get_dashoard_figure, get_report_figure
 from hhscarper.filters import RequestFilter, VacancyFilter
 from hhscarper.mixins import MyFilterView, MyLoginRequiredMixin, ReportView
 from hhscarper.models import Request, SkillReport, User, Vacancy, WordReport
@@ -40,6 +40,13 @@ class DashoardView(ListView):
         context['request_last'] = request_last
         context['vacancy_count'] = vacancy_count
         context['request_count'] = request_count
+
+        dashboard_chart = get_dashoard_figure()
+
+        dashboard_script, dashboard_html = dashboard_chart
+        context['dashboard_script'] = dashboard_script
+        context['dashboard_html'] = dashboard_html
+
         return context
 
 
@@ -111,20 +118,20 @@ class RequestDetailView(DetailView):
         valuable_skill = req_obj.skillreport.get_most_valuable()
         valuable_word = req_obj.wordreport.get_most_valuable()
 
-        desc_skill_chart = get_figure(
+        desc_skill_chart = get_report_figure(
             req_obj.skillreport.get_data(items=10),
             title=_('Самые востребованные навыки для данного запроса'),
         )
-        asc_skill_chart = get_figure(
+        asc_skill_chart = get_report_figure(
             req_obj.skillreport.get_data(items=10, order='asc'),
             title=_('Самые редкие навыки для данного запроса'),
         )
 
-        desc_word_chart = get_figure(
+        desc_word_chart = get_report_figure(
             req_obj.wordreport.get_data(items=10),
             title=_('Наиболее упоминаемое слово для данного запроса'),
         )
-        asc_word_chart = get_figure(
+        asc_word_chart = get_report_figure(
             req_obj.wordreport.get_data(items=10, order='asc'),
             title=_('Наиболее редкие слова для данного запроса'),
         )

@@ -68,11 +68,26 @@ class Vacancy(TimeStampMixin):
         ordering = ['-created_at']
 
 
+class RequestManager(models.Manager):
+
+    def group_by_date(self):
+
+        return (
+            self
+            .extra({'date_created': 'date(created_at)'})
+            .values('date_created')
+            .annotate(total=models.Count('id'))
+            .order_by('date_created')
+        )
+
+
 class Request(TimeStampMixin):
     class Status(models.TextChoices):
         pending = 'Pending', _('В процессе')
         resolved = 'Resolved', _('Готово')
         error = 'Error', _('Ошибка')
+
+    objects = RequestManager()
 
     keyword = models.CharField(
         unique=True,
