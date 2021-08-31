@@ -48,6 +48,7 @@ class MyFilterView(FilterView):
         context = super().get_context_data(**kwargs)
         query = dict(self.request.GET)
         query.pop('page', None)
-        query_string = '&'.join(f'{key}={val[0]}' for key, val in query.items())
-        context['saved_qs'] = '&' + query_string  # noqa: WPS336
+        if query:
+            query_string = '&'.join(f'{key}={val[0]}' for key, val in query.items())
+            context['saved_qs'] = '&' + query_string  # noqa: WPS336
         return context
