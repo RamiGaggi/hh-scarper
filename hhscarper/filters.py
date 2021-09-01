@@ -22,7 +22,7 @@ class VacancyFilter(django_filters.FilterSet):
         )
 
     title = django_filters.CharFilter(lookup_expr='icontains', label=_('Название вакансии'))
-    requests = django_filters.TypedChoiceFilter(label=_('Запросы'))
+    requests = django_filters.MultipleChoiceFilter(label=_('Запросы'))
 
     class Meta:
         model = Vacancy
