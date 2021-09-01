@@ -9,12 +9,13 @@
     <div class="form-group">
         {% bootstrap_form filter.form %}
         <input class="btn btn-primary mx-auto my-1" type="submit" value="{% translate "Найти" %}">
+        <a class="btn btn-danger mx-2 my-1" href="{% url 'hhscarper:request-list' %}">{% translate "Сброс" %}</a>
     </div>
 </form>
 {% endblock extra-top %}
 {% block thead %}
     <tr>
-        <th scope="col">ID</th>
+        <th scope="col">№</th>
         <th scope="col">{% translate "Ключевое слово" %}</th>
         <th scope="col">{% translate "Статус" %}</th>
         <th scope="col">{% translate "Затраченное время" %}</th>
@@ -27,7 +28,7 @@
 {% block tbody %}
     {% for request in request_list %}
         <tr>
-            <td>{{ request.pk }}</td>
+            <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'hhscarper:request-detail' request.pk %}">{{ request.keyword }}</a></td>
             <td>
                 {% with request.status as req_status  %}
@@ -42,11 +43,32 @@
             </td>
             <td>{{ request.time|time:"H:i:s" }}</td>
             <td>{{ request.created_at|date:"H:i:s | d/m/y" }}</td>
-            <td>{{ request.vacancy_set.count }}</td>
+            <td><a href="{% url 'hhscarper:vacancy-list' %}?request={{ request.pk }}">{{ request.vacancy_set.count }}</a></td>
             <td>
-                <a class="btn btn-outline-danger btn-sm" href="{% url 'hhscarper:request-delete' request.pk %}"><img src="{% static 'img/trash.svg' %}"  alt="trash"> {% translate "Удалить" %}</a>
+                {% if user.is_active %}
+                    <a class="btn btn-outline-danger btn-sm" href="{% url 'hhscarper:request-delete' request.pk %}"><img src="{% static 'img/trash.svg' %}"  alt="trash"> {% translate "Удалить" %}</a>
+                {% else %}
+                    <a class="btn btn-outline-secondary btn-sm disabled" href="#"><img src="{% static 'img/trash.svg' %}"  alt="trash"> {% translate "Удалить" %}</a>
+                {% endif %}
             </td>
 
         </tr>
     {% endfor %}
 {% endblock tbody%}
+
+{% block scripts %}
+    <script>
+      $( function() {
+        var availableTags = [
+            {% for request in request_list %}
+                "{{ request.keyword }}",
+            {% endfor %}
+        ];
+        $( "#id_keyword" ).autocomplete({
+          source: availableTags
+        });
+      } );
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"> </script>  
+    <script src= "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>  
+{% endblock %}
