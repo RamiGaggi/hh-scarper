@@ -8,12 +8,13 @@
     <div class="form-group">
         {% bootstrap_form filter.form %}
         <input class="btn btn-primary mx-auto my-1" type="submit" value="{% translate "Найти" %}">
+        <a class="btn btn-danger mx-2 my-1" href="{% url 'hhscarper:vacancy-list' %}">{% translate "Сброс" %}</a>
     </div>
 </form>
 {% endblock extra-top %}
 {% block thead %}
     <tr>
-        <th scope="col">ID</th>
+        <th scope="col">№</th>
         <th scope="col">{% translate "Название" %}</th>
         <th scope="col">{% translate "Ссылка" %}</th>
         <th scope="col">{% translate "Описание" %}</th>
@@ -24,7 +25,7 @@
 {% block tbody %}
     {% for vacancy in vacancy_list %}
         <tr>
-            <td>{{ vacancy.pk }}</td>
+            <td>{{ forloop.counter }}</td>
             <td>{{ vacancy.title }}</td>
             <td>{{ vacancy.link }}</td>
             <td>{{ vacancy.description|truncatechars:255 }}</td>
