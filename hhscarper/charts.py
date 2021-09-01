@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def get_report_figure(data, title=''):
     keyword_data = data
 
-    data = pd.Series(keyword_data).reset_index(name='value').rename(columns={'index': 'keyword'})  # noqa: E501
+    data = pd.Series(keyword_data, dtype='float64').reset_index(name='value').rename(columns={'index': 'keyword'})  # noqa: E501
 
     data['angle'] = (data['value'] / data['value'].sum()) * 2 * pi
     data['color'] = Category20c[len(keyword_data)]
@@ -53,7 +53,7 @@ def get_report_figure(data, title=''):
 
 def get_dashoard_figure():
     data = {row['date_created']: row['total'] for row in Request.objects.group_by_date()}
-    series = pd.Series(data).reset_index(name='total').rename(columns={'index': 'date'})
+    series = pd.Series(data, dtype='float64').reset_index(name='total').rename(columns={'index': 'date'})  # noqa: E501
     source = ColumnDataSource(data={'date': series['date'], 'total': series['total']})
 
     plot = figure(
