@@ -137,3 +137,11 @@ class WordReport(ReportMixin, TimeStampMixin):
 
     class Meta:
         db_table = 'hhscarper_word_report'
+
+
+class DiffReport(ReportMixin, TimeStampMixin):
+    def __str__(self):
+        return f'DiffReport {self.request.keyword}'
+
+    class Meta:
+        db_table = 'hhscarper_diff_report'
