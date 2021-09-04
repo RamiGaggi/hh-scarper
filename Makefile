@@ -39,3 +39,7 @@ shell:
 
 collectstatic:
 	@poetry run python manage.py collectstatic
+
+setup: migrate
+	@echo Create a super user
+	@poetry run python manage.py createsuperuser
