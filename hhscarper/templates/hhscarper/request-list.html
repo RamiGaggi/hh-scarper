@@ -43,7 +43,7 @@
             </td>
             <td>{{ request.time|time:"H:i:s" }}</td>
             <td>{{ request.created_at|date:"H:i:s | d/m/y" }}</td>
-            <td><a href="{% url 'hhscarper:vacancy-list' %}?request={{ request.pk }}">{{ request.vacancy_set.count }}</a></td>
+            <td><a href="{% url 'hhscarper:vacancy-list' %}?requests={{ request.pk }}">{{ request.vacancy_set.count }}</a></td>
             <td>
                 {% if user.is_active %}
                     <a class="btn btn-outline-danger btn-sm" href="{% url 'hhscarper:request-delete' request.pk %}"><img src="{% static 'img/trash.svg' %}"  alt="trash"> {% translate "Удалить" %}</a>
