@@ -1,11 +1,11 @@
 from string import digits, punctuation, whitespace
 
 from bs4 import BeautifulSoup
+from django.conf import settings
 from nltk.corpus import stopwords
 from pymystem3 import Mystem
 
-stem = Mystem()
-
+stem = Mystem(mystem_bin=settings.BASE_DIR / 'mystem')
 
 STOP_TOKENS = (
     *stopwords.words('russian'),
