@@ -1,6 +1,7 @@
 import codecs
 import csv
 import logging
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
@@ -77,7 +78,7 @@ class RequestCreateView(MyLoginRequiredMixin, CreateView):
             messages.SUCCESS,
             _('Запрос успешно отправлен'),
         )
-        scrape_async.delay(keyword, request_obj.id)
+        scrape_async.delay(keyword, request_obj.id, start=datetime.now())
         return super().form_valid(form)
 
     def form_invalid(self, form):

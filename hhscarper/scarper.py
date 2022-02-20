@@ -72,10 +72,12 @@ def get_vacancy_info(  # noqa: WPS231, C901
     return counter
 
 
-def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies'):
+def scrape(keyword, request_obj_id, adress='https://api.hh.ru/vacancies', start=None):
+    if not start:
+        start = datetime.now()
+
     logger.info(f'Keyword is: {keyword}')
     request_obj = Request.objects.get(pk=request_obj_id)
-    start = datetime.now()
     url = f'{adress}?per_page=100&text={keyword}'
     json_data = requests.get(url).json()
 
